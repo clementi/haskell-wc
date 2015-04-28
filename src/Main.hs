@@ -24,14 +24,10 @@ version = putStrLn "Haskell wc 0.1"
 exit = exitWith ExitSuccess
 die = exitWith (ExitFailure 1)
 
+parse [] = getContents
 parse ["-h"] = usage >> exit
 parse ["-v"] = version >> exit
-
-parse args = case args of
-               [] -> usage >> exit
-               (a:as) -> case a of
-                           "-h" -> usage >> exit
-                           "-v" -> version >> exit
+parse fs = concat `fmap` mapM readFile fs
 
 main :: IO ()
 main = getArgs >>= parse
