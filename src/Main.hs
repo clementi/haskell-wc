@@ -27,8 +27,7 @@ die = exitWith (ExitFailure 1)
 parse [] = getContents
 parse ["-h"] = usage >> exit
 parse ["-v"] = version >> exit
-parse fs = concat `fmap` mapM readFile fs
+parse filenames = concat `fmap` mapM readFile filenames
 
 main :: IO ()
-main = getArgs >>= parse
-
+main = getArgs >>= parse >>= putStr
