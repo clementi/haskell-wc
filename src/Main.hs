@@ -31,8 +31,17 @@ die = exitWith (ExitFailure 1)
 
 parse :: [String] -> IO String
 parse [] = getContents
+parse ["-w"] = getContents -- TODO
+parse ["-c"] = getContents -- TODO
+parse ["-l"] = getContents -- TODO
+parse ["-L"] = getContents -- TODO
+parse ("-w":filenames) = getContents -- TODO
+parse ("-c":filenames) = getContents -- TODO
+parse ("-l":filenames) = getContents -- TODO
+parse ("-L":filenames) = getContents -- TODO
 parse ["-h"] = usage >> exit
-parse ["-v"] = version >> exit
+parse ["--help"] = usage >> exit
+parse ["--version"] = version >> exit
 parse filenames = concat `fmap` mapM readFile filenames
 
 main :: IO ()
