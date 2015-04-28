@@ -39,7 +39,6 @@ parse ("-w":filenames) = getContents -- TODO
 parse ("-c":filenames) = getContents -- TODO
 parse ("-l":filenames) = getContents -- TODO
 parse ("-L":filenames) = getContents -- TODO
-parse ["-h"] = usage >> exit
 parse ["--help"] = usage >> exit
 parse ["--version"] = version >> exit
 parse filenames = concat `fmap` mapM readFile filenames
