@@ -38,14 +38,13 @@ doAction filenames action = case filenames of
                               fs -> readFiles fs >>= action
                       
 parse :: [String] -> IO Int
-parse [] = getContents >>= return . countLines
 parse ("-w":filenames) = doAction filenames (return . countWords)
 parse ("-c":filenames) = doAction filenames (return . countChars)
 parse ("-l":filenames) = doAction filenames (return . countLines)
 parse ("-L":filenames) = doAction filenames (return . maxLineLength)
+parse filenames = doAction filenames (return . countLines)
 parse ["--help"] = usage >> exit
 parse ["--version"] = version >> exit
-parse filenames = readFiles filenames >>= return . countLines
                   
 main :: IO ()
 main = getArgs >>= parse >>= print
