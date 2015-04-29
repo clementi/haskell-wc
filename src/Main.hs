@@ -31,20 +31,23 @@ die = exitWith (ExitFailure 1)
 
 readFiles :: [String] -> IO String
 readFiles filenames = concat `fmap` mapM readFile filenames
-      
+
+doAction :: [String] -> (String -> IO a) -> IO a
+doAction filenames action = case filenames of
+                              [] -> getContents >>= action
+                              fs -> readFiles fs >>= action
+                      
 parse :: [String] -> IO Int
 parse [] = getContents >>= return . countLines
-parse ["-w"] = getContents >>= return . countWords
-parse ["-c"] = getContents >>= return . countChars
-parse ["-l"] = getContents >>= return . countLines
-parse ["-L"] = getContents >>= return . maxLineLength
-parse ("-w":filenames) = readFiles filenames >>= return . countWords
-parse ("-c":filenames) = readFiles filenames >>= return . countChars
-parse ("-l":filenames) = readFiles filenames >>= return . countLines
-parse ("-L":filenames) = readFiles filenames >>= return . maxLineLength
+parse ("-w":filenames) = doAction filenames (return . countWords)
+parse ("-c":filenames) = doAction filenames (return . countChars)
+parse ("-l":filenames) = doAction filenames (return . countLines)
+parse ("-L":filenames) = doAction filenames (return . maxLineLength)
 parse ["--help"] = usage >> exit
 parse ["--version"] = version >> exit
 parse filenames = readFiles filenames >>= return . countLines
 
+
+                  
 main :: IO ()
 main = getArgs >>= parse >>= print
