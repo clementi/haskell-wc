@@ -42,9 +42,9 @@ parse ("-w":filenames) = doAction filenames (return . countWords)
 parse ("-c":filenames) = doAction filenames (return . countChars)
 parse ("-l":filenames) = doAction filenames (return . countLines)
 parse ("-L":filenames) = doAction filenames (return . maxLineLength)
-parse filenames = doAction filenames (return . countLines)
 parse ["--help"] = usage >> exit
 parse ["--version"] = version >> exit
-                  
+parse filenames = doAction filenames (return . countLines)
+
 main :: IO ()
 main = getArgs >>= parse >>= print
