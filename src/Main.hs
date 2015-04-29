@@ -46,8 +46,6 @@ parse ("-L":filenames) = doAction filenames (return . maxLineLength)
 parse ["--help"] = usage >> exit
 parse ["--version"] = version >> exit
 parse filenames = readFiles filenames >>= return . countLines
-
-
                   
 main :: IO ()
 main = getArgs >>= parse >>= print
