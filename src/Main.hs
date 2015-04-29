@@ -18,7 +18,7 @@ countWords = length . words
 usage :: IO ()
 usage = do
   progName <- getProgName
-  putStrLn ("Usage: " ++ progName ++ " [OPTION]... [FILE]...")
+  putStrLn ("Usage: " ++ progName ++ " [OPTION...] [FILE...]")
 
 version :: IO ()
 version = putStrLn "Haskell wc 0.1"
