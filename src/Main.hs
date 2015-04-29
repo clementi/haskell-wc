@@ -29,19 +29,19 @@ exit = exitWith ExitSuccess
 die :: IO a
 die = exitWith (ExitFailure 1)
 
-parse :: [String] -> IO String
-parse [] = getContents
-parse ["-w"] = getContents -- TODO
-parse ["-c"] = getContents -- TODO
-parse ["-l"] = getContents -- TODO
-parse ["-L"] = getContents -- TODO
-parse ("-w":filenames) = getContents -- TODO
-parse ("-c":filenames) = getContents -- TODO
-parse ("-l":filenames) = getContents -- TODO
-parse ("-L":filenames) = getContents -- TODO
+parse :: [String] -> IO Int
+parse [] = getContents >>= return . countLines
+parse ["-w"] = getContents >>= return . countWords
+parse ["-c"] = getContents >>= return . countChars
+parse ["-l"] = getContents >>= return . countLines
+parse ["-L"] = getContents >>= return . maxLineLength
+parse ("-w":filenames) = concat `fmap` mapM readFile filenames >>= return . countWords
+parse ("-c":filenames) = concat `fmap` mapM readFile filenames >>= return . countChars
+parse ("-l":filenames) = concat `fmap` mapM readFile filenames >>= return . countLines
+parse ("-L":filenames) = concat `fmap` mapM readFile filenames >>= return . maxLineLength
 parse ["--help"] = usage >> exit
 parse ["--version"] = version >> exit
-parse filenames = concat `fmap` mapM readFile filenames
+parse filenames = concat `fmap` mapM readFile filenames >>= return . countLines
 
 main :: IO ()
-main = getArgs >>= parse >>= putStr
+main = getArgs >>= parse >>= print
